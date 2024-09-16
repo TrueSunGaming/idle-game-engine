@@ -1,5 +1,5 @@
-import { derived, get, writable, type Readable, type Writable } from "svelte/store";
-import { setDeltaInterval } from "./setDeltaInterval.js";
+import { derived, writable, type Readable, type Writable } from "svelte/store";
+import { bindProduction } from "./bindProduction.js";
 
 export class Producer {
     rate: Readable<number>;
@@ -15,8 +15,7 @@ export class Producer {
         return derived([this.rate, this.count], ([r, c]) => r * c);
     }
 
-    bind(produced: Writable<number>): number {
-        const tr: Readable<number> = this.totalRate;
-        return setDeltaInterval((delta) => produced.set(get(produced) + get(tr) * delta), 50 / 3);
+    bind(result: Writable<number>): number {
+        return bindProduction(result, this.totalRate);
     }
 }
