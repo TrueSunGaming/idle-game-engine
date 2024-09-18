@@ -1,3 +1,21 @@
-<h1>Welcome to your library project</h1>
-<p>Create your package using @sveltejs/package and preview/showcase your work with SvelteKit</p>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script lang="ts">
+    import { Producer } from "$lib/Producer.js";
+    import { ProducerGroup } from "$lib/ProducerGroup.js";
+    import { get, readable, writable, type Readable, type Writable } from "svelte/store";
+
+    const money: Writable<number> = writable(100);
+
+    const prod: Producer = new Producer(100, 1.1, money, readable(10));
+    const pg: ProducerGroup = new ProducerGroup();
+    pg.producers.set([...get(pg.producers), prod]);
+
+    pg.bind(money);
+
+    const cost: Readable<number> = prod.cost;
+
+    console.log(prod.buy());
+</script>
+
+{ Math.floor($money).toLocaleString() }
+
+<button on:click={ () => prod.buy() }>buy ({ Math.floor($cost).toLocaleString() })</button>
