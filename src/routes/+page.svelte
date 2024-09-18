@@ -7,7 +7,7 @@
 
     const prod: Producer = new Producer(100, 1.1, money, readable(10));
     const pg: ProducerGroup = new ProducerGroup();
-    pg.producers.set([...get(pg.producers), prod]);
+    pg.addProducers(prod);
 
     pg.bind(money);
 
