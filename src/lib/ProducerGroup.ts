@@ -5,6 +5,10 @@ import { bindProduction } from "./bindProduction.js";
 export class ProducerGroup {
     producers: Writable<Producer[]> = writable([]);
 
+    addProducers(...producers: Producer[]): void {
+        this.producers.set([...get(this.producers), ...producers]);
+    }
+
     get rates(): Readable<Readable<number>[]> {
         return derived(this.producers, (p) => p.map((v) => v.totalRate));
     }
